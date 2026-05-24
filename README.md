@@ -3,9 +3,10 @@
 > A 3x3 mosaic of your recently played album covers.
 
 A widget for [Übersicht](http://tracesof.net/uebersicht/), self-contained in
-`index.jsx`. Out of the box it ranks your local Music library by play count;
-connect it to the Apple Music (MusicKit) API (below) for true recently-played
-ordering with correct artwork.
+`index.jsx`. Out of the box it ranks your local Music library by play count.
+Connect **Spotify** and/or **Apple Music (MusicKit)** (below) for true
+recently-played ordering with correct artwork — whichever source is configured
+and returns data is used first (Spotify, then Apple Music, then local).
 
 ![screenshot](screenshot.png)
 
@@ -23,8 +24,31 @@ The widget shown running alongside the full set:
    `~/Library/Application Support/Übersicht/widgets/`
 3. Refresh Übersicht (menu bar icon -> Refresh All).
 
-Without the MusicKit setup, the widget uses your local Music library (covers
-resolved via the public iTunes Search API), then deterministic color tiles.
+Without any setup, the widget uses your local Music library (covers resolved via
+the public iTunes Search API), then deterministic color tiles.
+
+## Connect to Spotify (optional)
+
+Uses the Spotify Web API for your recently-played albums.
+
+1. Copy the helpers:
+   ```sh
+   mkdir -p ~/.config/widgetsuite
+   cp setup/spotify-fetch.py setup/spotify-setup.py ~/.config/widgetsuite/
+   ```
+2. Create an app at https://developer.spotify.com/dashboard, add the redirect URI
+   `http://127.0.0.1:8723/callback`, then save its credentials:
+   ```sh
+   #  ~/.config/widgetsuite/spotify.json  {"client_id": "...", "client_secret": "..."}
+   ```
+3. Authorize (opens your browser, then writes a refresh token back):
+   ```sh
+   /usr/bin/python3 ~/.config/widgetsuite/spotify-setup.py
+   ```
+4. Refresh Übersicht.
+
+Your credentials and token stay on your machine and are never committed
+(see `.gitignore`).
 
 ## Connect to Apple Music / MusicKit (optional)
 
@@ -65,6 +89,8 @@ for MusicKit keys.
 ## Bundled files
 
 - `recent-album-covers.widget/index.jsx` — the widget
+- `setup/spotify-fetch.py` — optional Spotify recently-played helper (no keys included)
+- `setup/spotify-setup.py` — one-time Spotify OAuth helper
 - `setup/musickit-fetch.py` — optional Apple Music helper (no keys included)
 - `setup/musickit-setup.sh` — one-time MusicKit authorization helper
 

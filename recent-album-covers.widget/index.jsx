@@ -347,13 +347,17 @@ const resolve = (key, props, parse, mock) => {
 
 // A 3x3 mosaic of the nine most recent distinct album covers.
 //
-// Preferred source is a local MusicKit helper returning your Apple Music
-// recently-played (deduped to nine covers in recency order). If the helper is
-// absent or returns nothing, the widget falls back to ranking the local Music
-// library by play count (covers resolved via the iTunes Search API), then to
-// deterministic color tiles.
+// Source auto-detection, first with data wins:
+//   1. Spotify recently-played via the Spotify Web API helper (spotify-fetch.py).
+//   2. Apple Music recently-played via the MusicKit helper (musickit-fetch.py).
+//   3. The local Music library ranked by play count (covers via iTunes Search).
+//   4. Deterministic color tiles.
+// All paths emit the same RS/FS-delimited "cover<FS>albumURL" slots.
 export const command =
-  // Prefer Apple Music recently-played via the MusicKit helper when configured.
+  // Prefer Spotify recently-played when configured.
+  `SP=$(/usr/bin/python3 "$HOME/.config/widgetsuite/spotify-fetch.py" 2>/dev/null); ` +
+  `if [ -n "$SP" ]; then printf '%s' "$SP"; exit 0; fi; ` +
+  // Then Apple Music recently-played via the MusicKit helper.
   `MK=$(/usr/bin/python3 "$HOME/.config/widgetsuite/musickit-fetch.py" 2>/dev/null); ` +
   `if [ -n "$MK" ]; then printf '%s' "$MK"; exit 0; fi; ` +
   `US=$(printf '\\037'); RS=$(printf '\\036'); TAB=$(printf '\\t'); FS=$(printf '\\034'); ` +
