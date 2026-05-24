@@ -9,6 +9,12 @@ ordering with correct artwork.
 
 ![screenshot](screenshot.png)
 
+### On the desktop
+
+The widget shown running alongside the full set:
+
+<video src="https://github.com/jke48222/recent-album-covers-widget/raw/main/homescreen.mp4" controls width="100%"></video>
+
 ## Install
 
 1. Install and run [Übersicht](http://tracesof.net/uebersicht/).
@@ -61,6 +67,20 @@ for MusicKit keys.
 - `recent-album-covers.widget/index.jsx` — the widget
 - `setup/musickit-fetch.py` — optional Apple Music helper (no keys included)
 - `setup/musickit-setup.sh` — one-time MusicKit authorization helper
+
+## Other widgets
+
+- [Animated Wallpaper](https://github.com/jke48222/animated-wallpaper-widget)
+- [Clipboard History](https://github.com/jke48222/clipboard-history-widget)
+- [Daily AI Prompt](https://github.com/jke48222/daily-ai-prompt-widget)
+- [Daily Astronomy Photo](https://github.com/jke48222/daily-astronomy-photo-widget)
+- [Daily Tarot](https://github.com/jke48222/daily-tarot-widget)
+- [GitHub Contributions](https://github.com/jke48222/github-contributions-widget)
+- [Now Playing](https://github.com/jke48222/now-playing-widget)
+- [Recent Downloads](https://github.com/jke48222/recent-downloads-widget)
+- [Rotating 3D Model](https://github.com/jke48222/rotating-3d-model-widget)
+- [Spinning Globe](https://github.com/jke48222/spinning-globe-widget)
+- [Wallpaper Switcher](https://github.com/jke48222/wallpaper-switcher-widget)
 
 ## Author
 
