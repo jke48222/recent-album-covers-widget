@@ -345,12 +345,17 @@ const resolve = (key, props, parse, mock) => {
 };
 // --- End inlined design system ---
 
-// A 3x3 mosaic of the nine most-played albums from the local Music library.
+// A 3x3 mosaic of the nine most recent distinct album covers.
 //
-// The Music app is read via AppleScript, albums are ranked by play count, and
-// covers are resolved through the public iTunes Search API. With no data it
-// renders deterministic color tiles.
+// Preferred source is a local MusicKit helper returning your Apple Music
+// recently-played (deduped to nine covers in recency order). If the helper is
+// absent or returns nothing, the widget falls back to ranking the local Music
+// library by play count (covers resolved via the iTunes Search API), then to
+// deterministic color tiles.
 export const command =
+  // Prefer Apple Music recently-played via the MusicKit helper when configured.
+  `MK=$(/usr/bin/python3 "$HOME/.config/widgetsuite/musickit-fetch.py" 2>/dev/null); ` +
+  `if [ -n "$MK" ]; then printf '%s' "$MK"; exit 0; fi; ` +
   `US=$(printf '\\037'); RS=$(printf '\\036'); TAB=$(printf '\\t'); FS=$(printf '\\034'); ` +
   `PAYLOAD=$(osascript -e '` +
   `if application "Music" is running then\n` +
