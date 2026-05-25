@@ -8,13 +8,13 @@ Connect **Spotify** and/or **Apple Music (MusicKit)** (below) for true
 recently-played ordering with correct artwork — whichever source is configured
 and returns data is used first (Spotify, then Apple Music, then local).
 
-![screenshot](screenshot.png)
+![screenshot](media/screenshot.png)
 
 ### On the desktop
 
 The widget shown running alongside the full set:
 
-[![Homescreen demo — click to play](homescreen-poster.png)](homescreen.mp4)
+[![Homescreen demo — click to play](media/homescreen-poster.png)](media/homescreen.mp4)
 
 ## Install
 
