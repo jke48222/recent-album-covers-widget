@@ -371,21 +371,30 @@ export const command =
   `  end tell\n` +
   `  return a & (ASCII character 31) & al & (ASCII character 31) & p\n` +
   `end if\n` +
-  `return ""'); ` +
+  `return ""' 2>"$HOME/Library/Caches/ws-ma.err"); ` +
   `ARTS=$(printf '%s' "$PAYLOAD" | cut -d"$US" -f1); ` +
-  `if [ -z "$ARTS" ]; then echo ""; exit 0; fi; ` +
+  // No artists: distinguish a real permission block (so the widget can prompt)
+  // from an empty/cloud library or Music simply not running.
+  `if [ -z "$ARTS" ]; then if grep -qiE 'not authoriz|-1743|-10004|execution error' "$HOME/Library/Caches/ws-ma.err" 2>/dev/null; then printf '__PERM__'; fi; exit 0; fi; ` +
   `printf '%s' "$ARTS" | tr "$RS" '\\n' > /tmp/ws-ma-a; ` +
   `printf '%s' "$PAYLOAD" | cut -d"$US" -f2 | tr "$RS" '\\n' > /tmp/ws-ma-b; ` +
   `printf '%s' "$PAYLOAD" | cut -d"$US" -f3 | tr "$RS" '\\n' > /tmp/ws-ma-p; ` +
   `TOP=$(paste /tmp/ws-ma-a /tmp/ws-ma-b /tmp/ws-ma-p ` +
     `| awk -F'\\t' '$2!="" && $3+0>0 {k=$1"\\t"$2; c[k]+=$3} END{for(k in c) print c[k]"\\t"k}' ` +
     `| sort -rn | head -9 | cut -f2-); ` +
+  // Per-album cover cache: a resolved cover/url slot is keyed by artist+album,
+  // so steady-state refreshes reuse it and never re-hit the iTunes API unless
+  // the ranked lineup changes. This is what makes refreshes feel instant.
+  `AC="$HOME/Library/Caches/ws-albumart"; mkdir -p "$AC"; find "$AC" -type f -mtime +7 -delete 2>/dev/null; ` +
   `printf '%s\\n' "$TOP" | while IFS="$TAB" read -r ar al; do ` +
     `if [ -z "$ar$al" ]; then printf '%s%s' "$FS" "$RS"; continue; fi; ` +
+    `ck="$AC/$(printf '%s|%s' "$ar" "$al" | md5 2>/dev/null | awk '{print $NF}')"; ` +
+    `if [ -s "$ck" ]; then cat "$ck"; continue; fi; ` +
     `resp=$(curl -s -G "https://itunes.apple.com/search" --data-urlencode "term=$ar $al" -d "entity=song&limit=1"); ` +
     `cov=$(printf '%s' "$resp" | grep -o '"artworkUrl100":"[^"]*"' | head -1 | sed -e 's/^"artworkUrl100":"//' -e 's/"$//' | tr -d '\\\\' | sed 's/100x100bb/400x400bb/'); ` +
     `alb=$(printf '%s' "$resp" | grep -o '"collectionViewUrl":"[^"]*"' | head -1 | sed -e 's/^"collectionViewUrl":"//' -e 's/"$//' | tr -d '\\\\'); ` +
-    `printf '%s%s%s%s' "$cov" "$FS" "$alb" "$RS"; ` +
+    `slot=$(printf '%s%s%s%s' "$cov" "$FS" "$alb" "$RS"); ` +
+    `printf '%s' "$slot"; [ -n "$cov" ] && printf '%s' "$slot" > "$ck"; ` +
   `done`;
 
 export const refreshFrequency = 1000 * 15; // recently-played, near real-time; MusicKit path is one fast call
@@ -407,6 +416,12 @@ export const className = card("light", 300, 300, ...LAYOUT.musicArchive) + `
   .tile  { border-radius:10px; background-size:cover; background-position:center;
            box-shadow:0 6px 16px rgba(0,0,0,0.35); }
   .empty { opacity:0.85; }
+  .ma-perm { position:absolute; inset:0; display:flex; align-items:center;
+             justify-content:center; text-align:center; padding:28px; cursor:pointer;
+             box-sizing:border-box; border-radius:18px;
+             background:rgba(20,20,28,0.55); backdrop-filter:blur(8px);
+             color:${T.onDarkDim}; font-family:${mono}; font-size:10px;
+             line-height:1.5; letter-spacing:0.5px; }
 `;
 
 const parse = (output) => {
@@ -426,6 +441,19 @@ const parse = (output) => {
 const MOCK = { items: [] };
 
 export const render = (props) => {
+  // Local path blocked by macOS Automation permission: prompt to grant it.
+  if ((props.output || "").trim() === "__PERM__") {
+    return (
+      <div aria-label="Permission needed">
+        <DragHandle k="musicArchive" />
+        <ResizeHandle k="musicArchive" />
+        <div className="ma-perm"
+             onClick={() => run("open 'x-apple.systempreferences:com.apple.preference.security?Privacy_Automation'")}>
+          Allow Übersicht to control Music in System Settings → Automation
+        </div>
+      </div>
+    );
+  }
   const { data: m, loading } = resolve("musicarchive", props, parse, MOCK);
   if (loading) return <Skel tint={T.archivePalette[0]} />;
   const items = m.items || [];
