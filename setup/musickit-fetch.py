@@ -200,6 +200,29 @@ def fetch_nowplaying(mac_track="", mac_artist=""):
     })
 
 
+def fetch_recent():
+    # The single most-recently-played track with full metadata and artwork,
+    # marked not-playing. Used by NowSpinning when the Mac itself is idle so it
+    # shows the last thing you listened to (with correct art), the same
+    # recently-played source the album mosaic uses.
+    a = recent_top()
+    if not a:
+        return ""
+    track = a.get("name", "") or ""
+    if not track:
+        return ""
+    raw = (a.get("artwork", {}) or {}).get("url", "") or ""
+    art = raw.replace("{w}", "600").replace("{h}", "600").replace("{f}", "jpg") if raw else None
+    return json.dumps({
+        "track": track,
+        "artist": a.get("artistName", "") or "",
+        "album": a.get("albumName", "") or "",
+        "art": art,
+        "playing": False,
+        "url": a.get("url", "") or "",
+    })
+
+
 def fetch_cover(track="", artist="", album=""):
     # Correct Apple Music cover for a specific track via a catalog song search
     # (needs only the developer token). Used by NowSpinning to get the right
@@ -240,6 +263,9 @@ def main():
         print(fetch_cover(rest[0] if len(rest) > 0 else "",
                           rest[1] if len(rest) > 1 else "",
                           rest[2] if len(rest) > 2 else ""))
+        return
+    if "--recent" in sys.argv:
+        print(fetch_recent())
         return
     print(fetch_albums())
 
