@@ -1,6 +1,6 @@
 # recent-album-covers
 
-> The nine most recently played album covers standing on a record-shop pegboard.
+> A 3x3 mosaic of your recently played album covers.
 
 [![Release](https://img.shields.io/github/v/release/jke48222/recent-album-covers-widget?label=release)](https://github.com/jke48222/recent-album-covers-widget/releases/latest) [![License: MIT](https://img.shields.io/github/license/jke48222/recent-album-covers-widget)](LICENSE) ![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 
@@ -14,17 +14,13 @@ and returns data is used first (Spotify, then Apple Music, then local).
 
 ![screenshot](media/screenshot.png)
 
-A record-shop pegboard: perforated white hardboard with the nine most recent sleeves standing on three steel ledges, and a manila tag on a string for the label. Sleeves lift on hover; click one to open the album. Typeface: Courier Prime. All fonts are under the SIL Open Font License; see `recent-album-covers.widget/fonts/OFL.txt`.
-
-## Before and after
-
-![Before and after](media/before-after.png)
-
 ### On the desktop
 
 The widget running alongside the full set:
 
-![The Übersicht widget suite composed on one desktop](https://raw.githubusercontent.com/jke48222/widget-suite/main/homescreen.png)
+![The Übersicht widget suite running on a desktop](https://raw.githubusercontent.com/jke48222/widget-suite/main/homescreen.gif)
+
+[Full-resolution video](media/homescreen.mp4)
 
 ## Requirements
 
@@ -125,23 +121,19 @@ for MusicKit keys.
 
 ## Related widgets
 
-Part of the [Übersicht Widget Suite](https://github.com/jke48222/widget-suite): 16 widgets that share one design system.
+Part of the [Übersicht Widget Suite](https://github.com/jke48222/widget-suite): 12 widgets that share one design system.
 
-- [Agent Fleet](https://github.com/jke48222/agent-fleet-widget)
 - [Animated Wallpaper](https://github.com/jke48222/animated-wallpaper-widget)
 - [Clipboard History](https://github.com/jke48222/clipboard-history-widget)
 - [Daily AI Prompt](https://github.com/jke48222/daily-ai-prompt-widget)
 - [Daily Astronomy Photo](https://github.com/jke48222/daily-astronomy-photo-widget)
 - [Daily Tarot](https://github.com/jke48222/daily-tarot-widget)
 - [GitHub Contributions](https://github.com/jke48222/github-contributions-widget)
-- [Keys & Pads](https://github.com/jke48222/keys-and-pads-widget)
 - [Now Playing](https://github.com/jke48222/now-playing-widget)
-- [Pi Fleet](https://github.com/jke48222/pi-fleet-widget)
 - [Recent Downloads](https://github.com/jke48222/recent-downloads-widget)
 - [Rotating 3D Model](https://github.com/jke48222/rotating-3d-model-widget)
 - [Spinning Globe](https://github.com/jke48222/spinning-globe-widget)
 - [Wallpaper Switcher](https://github.com/jke48222/wallpaper-switcher-widget)
-- [Window Pet](https://github.com/jke48222/window-pet-widget)
 
 ## License
 

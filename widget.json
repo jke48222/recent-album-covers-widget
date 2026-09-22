@@ -1,6 +1,6 @@
 {
   "name": "recent-album-covers",
-  "description": "The nine most recently played album covers standing on a record-shop pegboard.",
+  "description": "A 3x3 mosaic of the nine most-played albums in your Music library.",
   "author": "Jalen Edusei",
   "email": "jalen.edusei@gmail.com"
 }

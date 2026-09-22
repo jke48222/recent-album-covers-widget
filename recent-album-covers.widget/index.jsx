@@ -1,4 +1,4 @@
-import { React } from "uebersicht";
+import { React, run } from "uebersicht";
 // --- Inlined design system (self-contained; formerly theme.js) ---
 // Shared design system for the widget set: color tokens, fonts, layout, the
 // common card shell, drag/resize handles, a last-known-good cache, and the
@@ -131,7 +131,7 @@ const card = (variant, w, h, x = 0, y = 0) => `
   .ws-drag  { position:absolute; top:6px; left:6px; z-index:30;
               width:18px; height:18px; border-radius:6px;
               display:flex; align-items:center; justify-content:center;
-              font-size:11px; line-height:1; cursor:grab; opacity:0.42;
+              font-size:11px; line-height:1; cursor:grab; opacity:0.22;
               transition:opacity .15s ease; user-select:none;
               -webkit-user-select:none;
               color:${variant === "dark" ? T.onDarkMute : T.inkMute};
@@ -143,7 +143,7 @@ const card = (variant, w, h, x = 0, y = 0) => `
   .ws-resize { position:absolute; bottom:5px; right:5px; z-index:30;
                width:16px; height:16px; border-radius:5px;
                display:flex; align-items:center; justify-content:center;
-               font-size:11px; line-height:1; cursor:nwse-resize; opacity:0.42;
+               font-size:11px; line-height:1; cursor:nwse-resize; opacity:0.22;
                transition:opacity .15s ease; user-select:none;
                -webkit-user-select:none;
                color:${variant === "dark" ? T.onDarkMute : T.inkMute};
@@ -344,6 +344,7 @@ const resolve = (key, props, parse, mock) => {
   return { data: mock, mock: true };
 };
 // --- End inlined design system ---
+
 // A 3x3 mosaic of the nine most recent distinct album covers.
 //
 // Source auto-detection, first with data wins:
@@ -406,35 +407,23 @@ const COLORS = (() => {
   const rnd = () => (s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
   return Array.from({ length: 9 }, () => T.archivePalette[Math.floor(rnd() * T.archivePalette.length)]);
 })();
-const FONTS = "recent-album-covers.widget/fonts";
-// A record-shop pegboard: perforated white hardboard with the nine most
-// recent sleeves standing on three steel ledges, and a manila tag on a string
-// for the label. Sleeves lift on hover; click one to open the album.
-export const className = card("light", 340, 372, ...LAYOUT.musicArchive) + `
-  @font-face { font-family: "Courier Prime"; src: url("${FONTS}/CourierPrime-400.woff2") format("woff2"); }
-  --board: #F3F1EA;
-  padding: 0; border-radius: 4px; backdrop-filter: none; overflow: hidden; user-select:none; -webkit-user-select:none;
-  background: radial-gradient(circle, #B9B5AA 0 1.4px, #8E8A80 1.5px 2.1px, rgba(0,0,0,0) 2.3px) 4px 4px / 16px 16px, linear-gradient(180deg, #F6F4EE, var(--board));
-  box-shadow: 0 30px 50px rgba(0,0,0,0.42), inset 0 0 0 1px #CFCBC0, inset 0 1px 0 #fff;
-  &::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:0.35; mix-blend-mode: multiply; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"); }
-  .ws-drag { top: 6px; left: 6px; color: #7a7466; background: rgba(0,0,0,0.05); } .ws-resize { bottom: 6px; right: 6px; color: #7a7466; background: rgba(0,0,0,0.05); }
-  .grid { position:absolute; left: 22px; top: 32px; display:grid; grid-template-columns: repeat(3, 92px); grid-auto-rows: 92px; column-gap: 10px; row-gap: 14px; }
-  .slot { position:relative; }
-  .sleeve { position:absolute; inset: 0; background-size: cover; background-position: center; background-color: #ddd; cursor: pointer; transform-origin: 50% 100%;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.28), 0 0 0 1px rgba(0,0,0,0.08), inset 0 0 0 2px rgba(255,255,255,0.85); transition: transform .15s ease, box-shadow .15s ease; }
-  .sleeve:hover { transform: translateY(-4px) rotate(-0.8deg); box-shadow: 0 10px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.08), inset 0 0 0 2px rgba(255,255,255,0.85); z-index: 2; }
-  .sleeve.empty { cursor: default; }
-  .sleeve.empty::after { content:""; position:absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; opacity: 0.9;
-                         background: radial-gradient(circle, rgba(255,255,255,0.6) 0 5px, #1a1a1a 6px 21px, rgba(0,0,0,0) 22px), repeating-radial-gradient(circle, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0) 1px 3px); }
-  .rail { position:absolute; left: 18px; width: 304px; height: 3px; border-radius: 2px; z-index: 1; background: linear-gradient(180deg, #E6E8EA, #8D9399); box-shadow: 0 2px 3px rgba(0,0,0,0.3); }
-  .rail::before, .rail::after { content:""; position:absolute; top: -3px; width: 6px; height: 8px; border-radius: 2px; background: linear-gradient(90deg, #7F858B, #D8DCE0 50%, #7F858B); box-shadow: 0 1px 1px rgba(0,0,0,0.3); }
-  .rail::before { left: 6px; } .rail::after { right: 6px; }
-  .tag { position:absolute; left: 118px; bottom: 9px; width: 104px; height: 24px; background: #E9D9A8; border-radius: 3px 12px 12px 3px; transform: rotate(-2deg);
-         box-shadow: 0 2px 3px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(120,90,30,0.35); font: 400 8px/24px "Courier Prime", monospace; color: #3B2E14; text-align:center; letter-spacing: 1px; text-transform: uppercase; }
-  .tag::before { content:""; position:absolute; right: 6px; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: #F3F1EA; box-shadow: inset 0 0 0 1px rgba(120,90,30,0.5); }
-  .tag::after { content:""; position:absolute; right: 8px; top: -9px; width: 1px; height: 11px; background: #8A7A50; transform: rotate(25deg); }
-  .ma-perm { position:absolute; left: 22px; right: 22px; top: 120px; padding: 12px; border-radius: 4px; background: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.2); font: 400 10px/1.4 "Courier Prime", monospace; color: #3B2E14; text-align:center; cursor:pointer; }
+
+export const className = card("light", 300, 300, ...LAYOUT.musicArchive) + `
+  background: transparent; box-shadow: none; backdrop-filter: none; overflow: visible;
+  padding: 0;
+  .grid  { position:absolute; inset:0; display:grid;
+           grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); gap:6px; }
+  .tile  { border-radius:10px; background-size:cover; background-position:center;
+           box-shadow:0 6px 16px rgba(0,0,0,0.35); }
+  .empty { opacity:0.85; }
+  .ma-perm { position:absolute; inset:0; display:flex; align-items:center;
+             justify-content:center; text-align:center; padding:28px; cursor:pointer;
+             box-sizing:border-box; border-radius:18px;
+             background:rgba(20,20,28,0.55); backdrop-filter:blur(8px);
+             color:${T.onDarkDim}; font-family:${mono}; font-size:10px;
+             line-height:1.5; letter-spacing:0.5px; }
 `;
+
 const parse = (output) => {
   const seen = new Set();
   const items = (output || "").split(RS).map((slot) => {
@@ -452,26 +441,38 @@ const parse = (output) => {
 const MOCK = { items: [] };
 
 export const render = (props) => {
+  // Local path blocked by macOS Automation permission: prompt to grant it.
   if ((props.output || "").trim() === "__PERM__") {
-    return (<div aria-label="Permission needed"><DragHandle k="musicArchive" /><ResizeHandle k="musicArchive" />
-      <div className="ma-perm" onClick={() => run("open 'x-apple.systempreferences:com.apple.preference.security?Privacy_Automation'")}>Allow Übersicht to control Music in System Settings → Automation</div>
-      <div className="tag">Recently played</div></div>);
+    return (
+      <div aria-label="Permission needed">
+        <DragHandle k="musicArchive" />
+        <ResizeHandle k="musicArchive" />
+        <div className="ma-perm"
+             onClick={() => run("open 'x-apple.systempreferences:com.apple.preference.security?Privacy_Automation'")}>
+          Allow Übersicht to control Music in System Settings → Automation
+        </div>
+      </div>
+    );
   }
-  const { data: m, loading, mock } = resolve("musicarchive", props, parse, MOCK);
+  const { data: m, loading } = resolve("musicarchive", props, parse, MOCK);
   if (loading) return <Skel tint={T.archivePalette[0]} />;
   const items = m.items || [];
+
   return (
     <div aria-label="Your most played albums">
       <DragHandle k="musicArchive" />
       <ResizeHandle k="musicArchive" />
       <div className="grid">
-        {Array.from({ length: 9 }, (_, i) => { const it = items[i]; const appUrl = it && it.url ? it.url.replace(/^https?:\/\//, "music://") : "";
-          return (<div key={i} className="slot">{it && it.cover
-            ? <div className="sleeve" style={{ backgroundImage: `url(${it.cover})`, cursor: appUrl ? "pointer" : "default" }} onClick={() => appUrl && run(`open "${appUrl}"`)} />
-            : <div className="sleeve empty" style={{ backgroundColor: COLORS[i] }} />}</div>); })}
+        {Array.from({ length: 9 }, (_, i) => {
+          const it = items[i];
+          // Open in the Music app via the music:// scheme rather than the web.
+          const appUrl = it && it.url ? it.url.replace(/^https?:\/\//, "music://") : "";
+          return it && it.cover
+            ? <div key={i} className="tile" style={{ backgroundImage: `url(${it.cover})`, cursor: appUrl ? "pointer" : "default" }}
+                   onClick={() => appUrl && run(`open "${appUrl}"`)} />
+            : <div key={i} className="tile empty" style={{ background: COLORS[i] }} />;
+        })}
       </div>
-      {[123, 229, 335].map((y) => <div key={y} className="rail" style={{ top: y }} />)}
-      <div className="tag">{items.length ? "Recently played" : "Sample sleeves"}</div>
     </div>
   );
 };
