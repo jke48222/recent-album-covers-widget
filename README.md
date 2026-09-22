@@ -2,6 +2,10 @@
 
 > A 3x3 mosaic of your recently played album covers.
 
+[![Release](https://img.shields.io/github/v/release/jke48222/recent-album-covers-widget?label=release)](https://github.com/jke48222/recent-album-covers-widget/releases/latest) [![License: MIT](https://img.shields.io/github/license/jke48222/recent-album-covers-widget)](LICENSE) ![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
+
+[Übersicht gallery](https://tracesof.net/uebersicht-widgets/) · [Widget suite](https://github.com/jke48222/widget-suite) · [Download](https://github.com/jke48222/recent-album-covers-widget/releases/latest) · [Setup guide](docs/SETUP.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)
+
 A widget for [Übersicht](http://tracesof.net/uebersicht/), self-contained in
 `index.jsx`. Out of the box it ranks your local Music library by play count.
 Connect **Spotify** and/or **Apple Music (MusicKit)** (below) for true
@@ -12,20 +16,39 @@ and returns data is used first (Spotify, then Apple Music, then local).
 
 ### On the desktop
 
-The widget shown running alongside the full set:
+The widget running alongside the full set:
 
-[![Homescreen demo — click to play](media/homescreen-poster.png)](media/homescreen.mp4)
+![The Übersicht widget suite running on a desktop](https://raw.githubusercontent.com/jke48222/widget-suite/main/homescreen.gif)
+
+[Full-resolution video](media/homescreen.mp4)
+
+## Requirements
+
+- macOS with [Übersicht](https://tracesof.net/uebersicht/) installed (`brew install --cask ubersicht`)
+- Optional: Spotify (see below)
+- Optional: Apple Music / MusicKit (see below)
 
 ## Install
 
-1. Install and run [Übersicht](http://tracesof.net/uebersicht/).
-2. Unzip `recent-album-covers.widget.zip`, or copy the
-   `recent-album-covers.widget` folder into your Übersicht widgets directory:
-   `~/Library/Application Support/Übersicht/widgets/`
-3. Refresh Übersicht (menu bar icon -> Refresh All).
+If you don't have Übersicht yet:
+
+```sh
+brew install --cask ubersicht
+```
+
+**One-click.** Clone the repo and run the installer. It copies the widget into Übersicht's widgets folder, installs any helper scripts, and runs setup if the widget needs it. Safe to re-run.
+
+```sh
+git clone https://github.com/jke48222/recent-album-covers-widget.git
+cd recent-album-covers-widget && ./install.sh
+```
+
+**Manual.** Download `recent-album-covers.widget.zip` from the [latest release](https://github.com/jke48222/recent-album-covers-widget/releases/latest), unzip it, and put the `recent-album-covers.widget` folder in `~/Library/Application Support/Übersicht/widgets/`. Then refresh Übersicht (menu bar icon → Refresh All).
 
 Without any setup, the widget uses your local Music library (covers resolved via
 the public iTunes Search API), then deterministic color tiles.
+
+Blank widget? Run `./check.sh` for a pass/fail diagnosis, or see [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
 
 ## Connect to Spotify (optional)
 
@@ -80,7 +103,7 @@ Your `.p8`, tokens, and `musickit.json` stay on your machine and are never
 committed (see `.gitignore`). An Apple Developer Program membership is required
 for MusicKit keys.
 
-## How to edit
+## Customization
 
 - Tile count and styling: `index.jsx` (the `className` and the 3x3 grid in
   `render()`).
@@ -93,8 +116,12 @@ for MusicKit keys.
 - `setup/spotify-setup.py` — one-time Spotify OAuth helper
 - `setup/musickit-fetch.py` — optional Apple Music helper (no keys included)
 - `setup/musickit-setup.sh` — one-time MusicKit authorization helper
+- `install.sh` / `install.command` — one-click installer (copies the widget into Übersicht and installs any helpers)
+- `check.sh` — read-only setup diagnostics; prints pass/fail per item
 
-## Other widgets
+## Related widgets
+
+Part of the [Übersicht Widget Suite](https://github.com/jke48222/widget-suite): 12 widgets that share one design system.
 
 - [Animated Wallpaper](https://github.com/jke48222/animated-wallpaper-widget)
 - [Clipboard History](https://github.com/jke48222/clipboard-history-widget)
@@ -107,6 +134,10 @@ for MusicKit keys.
 - [Rotating 3D Model](https://github.com/jke48222/rotating-3d-model-widget)
 - [Spinning Globe](https://github.com/jke48222/spinning-globe-widget)
 - [Wallpaper Switcher](https://github.com/jke48222/wallpaper-switcher-widget)
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ## Author
 
