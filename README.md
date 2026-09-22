@@ -1,6 +1,6 @@
 # recent-album-covers
 
-> A 3x3 mosaic of your recently played album covers.
+> The nine most recently played album covers standing on a record-shop pegboard.
 
 [![Release](https://img.shields.io/github/v/release/jke48222/recent-album-covers-widget?label=release)](https://github.com/jke48222/recent-album-covers-widget/releases/latest) [![License: MIT](https://img.shields.io/github/license/jke48222/recent-album-covers-widget)](LICENSE) ![Platform: macOS](https://img.shields.io/badge/platform-macOS-lightgrey)
 
@@ -14,7 +14,7 @@ and returns data is used first (Spotify, then Apple Music, then local).
 
 ![screenshot](media/screenshot.png)
 
-Nine sleeves in a walnut cube shelf: wood grain, recessed cubbies with a lit lip, each sleeve leaning back a touch with a spine shadow, and a small brass plate. Typeface: Cinzel. All fonts are under the SIL Open Font License; see `recent-album-covers.widget/fonts/OFL.txt`.
+A record-shop pegboard: perforated white hardboard with the nine most recent sleeves standing on three steel ledges, and a manila tag on a string for the label. Sleeves lift on hover; click one to open the album. Typeface: Courier Prime. All fonts are under the SIL Open Font License; see `recent-album-covers.widget/fonts/OFL.txt`.
 
 ## Before and after
 
