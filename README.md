@@ -14,13 +14,17 @@ and returns data is used first (Spotify, then Apple Music, then local).
 
 ![screenshot](media/screenshot.png)
 
+Nine sleeves in a walnut cube shelf: wood grain, recessed cubbies with a lit lip, each sleeve leaning back a touch with a spine shadow, and a small brass plate. Typeface: Cinzel. All fonts are under the SIL Open Font License; see `recent-album-covers.widget/fonts/OFL.txt`.
+
+## Before and after
+
+![Before and after](media/before-after.png)
+
 ### On the desktop
 
 The widget running alongside the full set:
 
-![The Übersicht widget suite running on a desktop](https://raw.githubusercontent.com/jke48222/widget-suite/main/homescreen.gif)
-
-[Full-resolution video](media/homescreen.mp4)
+![The Übersicht widget suite composed on one desktop](https://raw.githubusercontent.com/jke48222/widget-suite/main/homescreen.png)
 
 ## Requirements
 
